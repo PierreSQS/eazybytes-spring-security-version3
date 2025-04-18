@@ -12,9 +12,7 @@ public class ProjectSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        /*http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());*/
-        /*http.authorizeHttpRequests((requests) -> requests.anyRequest().denyAll());*/
-        http.authorizeHttpRequests((requests) -> requests
+        http.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/notices", "/contact", "/error").permitAll()
                 .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated());
         http.formLogin(withDefaults());

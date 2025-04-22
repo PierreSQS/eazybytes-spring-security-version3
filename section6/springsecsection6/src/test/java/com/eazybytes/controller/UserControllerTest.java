@@ -1,18 +1,36 @@
 package com.eazybytes.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+import com.eazybytes.model.Customer;
+import com.eazybytes.repository.CustomerRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerMvcTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
-    @SpringMock
-    private CustomerRepository customerRepository;
+    @MockitoBean
+    CustomerRepository customerRepository;
 
-    @SpringMock
-    private PasswordEncoder passwordEncoder;
+    @MockitoBean
+    PasswordEncoder passwordEncoder;
 
     @Test
     void registerUserReturnsCreatedWhenValidCustomerProvided() throws Exception {

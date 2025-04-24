@@ -21,6 +21,7 @@ public class ProjectSecurityProdConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession"));
         http.csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()

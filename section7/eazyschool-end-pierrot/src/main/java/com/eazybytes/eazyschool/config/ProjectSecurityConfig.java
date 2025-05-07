@@ -25,8 +25,8 @@ public class ProjectSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/dashboard").permitAll()
                         .requestMatchers("/", "/home", "/holidays/**", "/contact", "/saveMsg",
-                                "/courses", "/about", "/assets/**").permitAll())
-                .formLogin(Customizer.withDefaults())
+                                "/courses", "/about", "/assets/**", "/login/**").permitAll())
+                .formLogin(flc -> flc.loginPage("/login"))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,8 +21,9 @@ public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf((csrf) -> csrf.disable())
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/dashboard").permitAll()
+        http.csrf(CsrfConfigurer::disable)
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/dashboard").permitAll()
                         .requestMatchers("/", "/home", "/holidays/**", "/contact", "/saveMsg",
                                 "/courses", "/about", "/assets/**").permitAll())
                 .formLogin(Customizer.withDefaults())
@@ -48,7 +50,6 @@ public class ProjectSecurityConfig {
     /**
      * From Spring Security 6.3 version
      *
-     * @return
      */
     @Bean
     public CompromisedPasswordChecker compromisedPasswordChecker() {

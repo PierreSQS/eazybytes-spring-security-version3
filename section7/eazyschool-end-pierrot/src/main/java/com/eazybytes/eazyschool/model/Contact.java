@@ -1,7 +1,6 @@
 package com.eazybytes.eazyschool.model;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
 
 import jakarta.validation.constraints.*;
 
@@ -14,7 +13,7 @@ This makes our code short and clean.
 public class Contact {
 
     /*
-    * @NotNull: Checks if a given field is not null but allows empty values & zero elements inside collections.
+    * @NotNull: Checks if a given field is not null but allows empty values and zero elements inside collections.
       @NotEmpty: Checks if a given field is not null and its size/length is greater than zero.
       @NotBlank: Checks if a given field is not null and trimmed length is greater than zero.
     * */
@@ -23,7 +22,7 @@ public class Contact {
     private String name;
 
     @NotBlank(message="Mobile number must not be blank")
-    @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    @Pattern(regexp="(^$|\\d{10})",message = "Mobile number must be 10 digits")
     private String mobileNum;
 
     @NotBlank(message="Email must not be blank")

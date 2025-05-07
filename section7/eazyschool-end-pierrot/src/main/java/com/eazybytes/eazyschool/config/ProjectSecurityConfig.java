@@ -26,9 +26,10 @@ public class ProjectSecurityConfig {
                         .requestMatchers("/dashboard").permitAll()
                         .requestMatchers("/", "/home", "/holidays/**", "/contact", "/saveMsg",
                                 "/courses", "/about", "/assets/**", "/login/**").permitAll())
-                .formLogin(flc -> flc
+                .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true))
+                        .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/login?error=true"))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

@@ -37,7 +37,8 @@ public class ProjectSecurityConfig {
         UserDetails user = User.withUsername("user")
                 .password("{noop}EazyBytes@12345").authorities("read").build();
         UserDetails admin = User.withUsername("admin")
-                .password("{bcrypt}$2a$12$88.f6upbBvy0okEa7OfHFuorV29qeK.sVbB9VQ6J6dWM1bW6Qef8m")
+//                .password("{bcrypt}$2a$12$88.f6upbBvy0okEa7OfHFuorV29qeK.sVbB9VQ6J6dWM1bW6Qef8m")
+                .password("{bcrypt}$2a$10$kjYbuL0q726fibW/2XZGrOsv3eEBKykRJtZCUvS2NE7V2OeurEK5u")
                 .authorities("admin").build();
         return new InMemoryUserDetailsManager(user, admin);
     }

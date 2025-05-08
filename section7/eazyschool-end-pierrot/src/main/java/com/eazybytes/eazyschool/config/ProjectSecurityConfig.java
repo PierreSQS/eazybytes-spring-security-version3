@@ -30,6 +30,12 @@ public class ProjectSecurityConfig {
                         .loginPage("/login")
                         .defaultSuccessUrl("/dashboard", true)
                         .failureUrl("/login?error=true"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID"))
+
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

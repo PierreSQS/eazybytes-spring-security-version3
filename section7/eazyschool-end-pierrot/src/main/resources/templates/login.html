@@ -48,6 +48,10 @@ Author URL: http://w3layouts.com
                     <div class="col-md-8 login-center input-grids">
                         <li class="alert alert-danger" role="alert" th:if="${!#strings.isEmpty(errorMessage)}"
                             th:text="${errorMessage}" />
+
+                        <li class="alert alert-success" role="alert" th:if="${!#strings.isEmpty(logMessage)}"
+                            th:text="${logMessage}" />
+
                         <input type="text" name="username" id="username" placeholder="Username"
                                class="login-input" />
                         <input type="password" name="password" id="password" placeholder="Password"

@@ -31,7 +31,6 @@ public class ProjectSecurityConfig {
                         .defaultSuccessUrl("/dashboard", true)
                         .failureUrl("/login?error=true"))
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout=true")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID"))

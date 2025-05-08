@@ -25,7 +25,9 @@ public class ProjectSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/dashboard").permitAll()
                         .requestMatchers("/", "/home", "/holidays/**", "/contact", "/saveMsg",
-                                "/courses", "/about", "/assets/**", "/login/**").permitAll())
+                                "/courses", "/about", "/assets/**", "/login/**").permitAll()
+                        // added additional request matchers for misc. resources
+                        .requestMatchers("/favicon.*", "/error/**").permitAll())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .defaultSuccessUrl("/dashboard", true)

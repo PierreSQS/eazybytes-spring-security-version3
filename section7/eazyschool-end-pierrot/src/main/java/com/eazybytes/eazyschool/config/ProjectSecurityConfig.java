@@ -33,6 +33,7 @@ public class ProjectSecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout=true")
                         .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .deleteCookies("JSESSIONID"))
 
                 .httpBasic(Customizer.withDefaults());

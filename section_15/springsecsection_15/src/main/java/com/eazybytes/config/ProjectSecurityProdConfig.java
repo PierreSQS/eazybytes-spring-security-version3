@@ -44,7 +44,7 @@ public class ProjectSecurityProdConfig {
                     return config;
                 }))
                 .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-                        .ignoringRequestMatchers("/contact", "/register", "/apiLogin")
+                        .ignoringRequestMatchers("/contact")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPS
@@ -54,7 +54,7 @@ public class ProjectSecurityProdConfig {
                 .requestMatchers("/myLoans").authenticated()
                 .requestMatchers("/myCards").hasRole("USER")
                 .requestMatchers("/user").authenticated()
-                .requestMatchers("/notices", "/contact", "/error", "/register", "/invalidSession", "/apiLogin").permitAll());
+                .requestMatchers("/notices", "/contact", "/error").permitAll());
 
         // sets the JWT authentication converter for the OAuth2 resource server
         http.oauth2ResourceServer(oauth2 -> oauth2

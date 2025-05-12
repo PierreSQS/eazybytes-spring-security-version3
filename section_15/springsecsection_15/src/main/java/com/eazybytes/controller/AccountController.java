@@ -23,8 +23,8 @@ public class AccountController {
     public Accounts getAccountDetails(@RequestParam String email) {
         Optional<Customer> byEmail = customerRepository.findByEmail(email);
 
-        return byEmail.map(customer -> accountsRepository.findByCustomerId(customer.getId())
-                .orElse(null)).orElse(null);
+        return byEmail.flatMap(customer -> accountsRepository.findByCustomerId(customer.getId()))
+                .orElse(null);
 
     }
 

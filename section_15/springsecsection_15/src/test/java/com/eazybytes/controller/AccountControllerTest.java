@@ -2,6 +2,7 @@ package com.eazybytes.controller;
 
 import com.eazybytes.config.ProjectSecurityConfig;
 import com.eazybytes.model.Accounts;
+import com.eazybytes.model.Customer;
 import com.eazybytes.repository.AccountsRepository;
 import com.eazybytes.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,21 +25,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+     MockMvc mockMvc;
 
     @MockBean
-    private AccountsRepository accountsRepository;
+     AccountsRepository accountsRepository;
 
     @MockBean
-    private CustomerRepository customerRepository;
+     CustomerRepository customerRepository;
 
     @BeforeEach
     void setUp() {
         // Mock-Daten vorbereiten
         when(customerRepository.findByEmail("test@example.com"))
-                .thenReturn(Optional.of(new Customer(1L, "Test", "User", "test@example.com")));
+                .thenReturn(Optional.of(Customer.builder()
+                        .id(1L)
+                        .name("Test")
+                        .email("test@example.com")
+                        .mobileNumber("1111111111")
+                        .build( )));
         when(accountsRepository.findByCustomerId(1L))
-                .thenReturn(Optional.of(new Accounts(1L, "123456789", "Savings", 1L)));
+                .thenReturn(Optional.of(Accounts.builder()
+                        .customerId(1L)
+                        .accountNumber(123456789L)
+                        .accountType("Savings")
+                        .build()));
     }
 
     @Test

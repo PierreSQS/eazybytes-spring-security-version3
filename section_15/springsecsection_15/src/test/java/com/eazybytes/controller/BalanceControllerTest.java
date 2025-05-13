@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BalanceController.class)
@@ -26,19 +27,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BalanceControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @MockBean
-    private AccountTransactionsRepository accountTransactionsRepository;
+    AccountTransactionsRepository accountTransactionsRepository;
 
     @MockBean
-    private CustomerRepository customerRepository;
+    CustomerRepository customerRepository;
 
     @BeforeEach
     void setUp() {
         // Mock-Daten vorbereiten
-        Customer mockCustomer = new Customer(1L, "Test", "User", "test@example.com");
-        AccountTransactions mockTransaction = new AccountTransactions(1L, 1L, "Credit", 100.0, "2023-01-01");
+        Customer mockCustomer = Customer.builder()
+                .id(1L)
+                .name("Test")
+                .email("test@example.com")
+                .mobileNumber("1111111111")
+                .build();
+        AccountTransactions mockTransaction = AccountTransactions.builder()
+                .transactionId("1L")
+                .accountNumber(123456789L)
+                .customerId(1L)
+                .transactionType("Credit")
+                .transactionAmt(100)
+                .build();
 
         when(customerRepository.findByEmail("test@example.com"))
                 .thenReturn(Optional.of(mockCustomer));
@@ -52,12 +64,14 @@ class BalanceControllerTest {
         mockMvc.perform(get("/myBalance").param("email", "test@example.com"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].transactionType").value("Credit"))
-                .andExpect(jsonPath("$[0].amount").value(100.0));
+                .andExpect(jsonPath("$[0].transactionAmt").value(100.0))
+                .andDo(print());
     }
 
     @Test
     void testGetBalanceDetailsWithoutAuthentication() throws Exception {
         mockMvc.perform(get("/myBalance").param("email", "test@example.com"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
     }
 }

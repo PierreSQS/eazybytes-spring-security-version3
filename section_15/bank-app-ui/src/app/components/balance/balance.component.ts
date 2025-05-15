@@ -18,7 +18,7 @@ export class BalanceComponent implements OnInit {
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('userdetails') || "");
     if(this.user){
-      this.dashboardService.getAccountTransactions(this.user.email).subscribe(
+      this.dashboardService.getAccountTransactions(this.user.id).subscribe(
         responseData => {
         this.transactions = <any> responseData.body;
         });

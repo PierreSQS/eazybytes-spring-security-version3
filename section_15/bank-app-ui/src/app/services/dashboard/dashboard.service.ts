@@ -11,20 +11,20 @@ export class DashboardService {
 
   constructor(private http:HttpClient) { }
 
-  getAccountDetails(email: String){
-    return this.http.get(environment.rooturl + AppConstants.ACCOUNT_API_URL + "?email="+email,{ observe: 'response',withCredentials: true });
+  getAccountDetails(id: number){
+    return this.http.get(environment.rooturl + AppConstants.ACCOUNT_API_URL + "?id="+id,{ observe: 'response',withCredentials: true });
   }
 
-  getAccountTransactions(email: String){
-    return this.http.get(environment.rooturl + AppConstants.BALANCE_API_URL+ "?email="+email,{ observe: 'response',withCredentials: true });
+  getAccountTransactions(id: number){
+    return this.http.get(environment.rooturl + AppConstants.BALANCE_API_URL+ "?id="+id,{ observe: 'response',withCredentials: true });
   }
 
-  getLoansDetails(email: String){
-    return this.http.get(environment.rooturl + AppConstants.LOANS_API_URL+ "?email="+email,{ observe: 'response',withCredentials: true });
+  getLoansDetails(id: number){
+    return this.http.get(environment.rooturl + AppConstants.LOANS_API_URL+ "?id="+id,{ observe: 'response',withCredentials: true });
   }
 
-  getCardsDetails(email: String){
-    return this.http.get(environment.rooturl + AppConstants.CARDS_API_URL+ "?email="+email,{ observe: 'response',withCredentials: true });
+  getCardsDetails(id: number){
+    return this.http.get(environment.rooturl + AppConstants.CARDS_API_URL+ "?id="+id,{ observe: 'response',withCredentials: true });
   }
 
   getNoticeDetails(){
@@ -34,7 +34,7 @@ export class DashboardService {
   saveMessage(contact : Contact){
     var contacts = [];
     contacts.push(contact);
-    return this.http.post(environment.rooturl + AppConstants.CONTACT_API_URL,contacts,{ observe: 'response'});
+    return this.http.post(environment.rooturl + AppConstants.CONTACT_API_URL,contacts,{ observe: 'response',withCredentials: true });
   }
 
 }

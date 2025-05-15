@@ -20,12 +20,12 @@ export class CardsComponent implements OnInit {
   ngOnInit(): void {
     this.user = JSON.parse(sessionStorage.getItem('userdetails') || "");
     if(this.user){
-      this.dashboardService.getCardsDetails(this.user.id).subscribe(
+      this.dashboardService.getCardsDetails(this.user.email).subscribe(
         responseData => {
         this.cards = <any> responseData.body;
         this.cards.forEach(function (this: CardsComponent, card: Cards) {
           this.currOutstandingAmt = this.currOutstandingAmt+card.availableAmount;
-        }.bind(this)); 
+        }.bind(this));
         });
     }
   }

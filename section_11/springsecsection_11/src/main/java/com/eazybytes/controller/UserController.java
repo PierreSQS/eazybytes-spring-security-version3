@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,7 +41,7 @@ public class UserController {
         try {
             String hashPwd = passwordEncoder.encode(customer.getPwd());
             customer.setPwd(hashPwd);
-            customer.setCreateDt(new Date(System.currentTimeMillis()));
+            customer.setCreateDt(LocalDateTime.now());
             Customer savedCustomer = customerRepository.save(customer);
 
             if (savedCustomer.getId() > 0) {

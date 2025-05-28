@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -26,10 +27,10 @@ public class Notice {
     private String noticeDetails;
 
     @Column(name = "notic_beg_dt")
-    private Date noticBegDt;
+    private LocalDateTime noticBegDt;
 
     @Column(name = "notic_end_dt")
-    private Date noticEndDt;
+    private LocalDateTime noticEndDt;
 
     @JsonIgnore
     @Column(name = "create_dt")

@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -22,7 +22,7 @@ public class Loans {
     private long customerId;
 
     @Column(name = "start_dt")
-    private Date startDt;
+    private LocalDateTime startDt;
 
     @Column(name = "loan_type")
     private String loanType;
@@ -37,6 +37,6 @@ public class Loans {
     private int outstandingAmount;
 
     @Column(name = "create_dt")
-    private Date createDt;
+    private LocalDateTime createDt;
 
 }

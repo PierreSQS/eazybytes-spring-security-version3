@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -41,6 +42,6 @@ public class AccountTransactions {
 	private int closingBalance;
 	
 	@Column(name = "create_dt")
-	private Date createDt;
+	private LocalDateTime createDt;
 
 }

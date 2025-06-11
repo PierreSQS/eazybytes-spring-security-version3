@@ -5,7 +5,9 @@ import com.eazybytes.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,8 +21,8 @@ import java.time.LocalDateTime;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(UserController.class)
-@Import(com.eazybytes.config.ProjectSecurityConfig.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
 
     @Autowired
@@ -35,7 +37,6 @@ class UserControllerTest {
     @MockitoBean
     AuthenticationManager authenticationManager;
 
-    @MockitoBean
     Environment env;
 
     @Test
@@ -74,7 +75,7 @@ class UserControllerTest {
                 """;
 
 
-        mockMvc.perform(post("/login")
+        mockMvc.perform(post("/apiLogin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());

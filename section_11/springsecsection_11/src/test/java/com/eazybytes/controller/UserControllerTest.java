@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.core.env.Environment;
 
@@ -24,19 +24,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
-    @MockBean
-    private CustomerRepository customerRepository;
+    @MockitoBean
+    CustomerRepository customerRepository;
 
-    @MockBean
-    private PasswordEncoder passwordEncoder;
+    @MockitoBean
+    PasswordEncoder passwordEncoder;
 
-    @MockBean
-    private AuthenticationManager authenticationManager;
+    @MockitoBean
+    AuthenticationManager authenticationManager;
 
-    @MockBean
-    private Environment env;
+    @MockitoBean
+    Environment env;
 
     @Test
     void registerUser_success() throws Exception {
@@ -57,8 +57,8 @@ class UserControllerTest {
                 """;
 
         mockMvc.perform(post("/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Given user details are successfully registered"));
     }
@@ -73,11 +73,10 @@ class UserControllerTest {
                 }
                 """;
 
-        // Hier ggf. AuthenticationManager und weitere Mocks konfigurieren
 
         mockMvc.perform(post("/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andExpect(status().isOk());
     }
 
@@ -87,9 +86,4 @@ class UserControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    // Weitere Tests für alle Handler-Methoden ergänzen, z.B.:
-    // - getUserDetails_authenticated
-    // - updateUser
-    // - deleteUser
-    // Die Implementierung hängt von den Methoden im UserController ab.
 }

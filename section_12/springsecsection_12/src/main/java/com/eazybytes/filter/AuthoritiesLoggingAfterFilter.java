@@ -14,15 +14,15 @@ public class AuthoritiesLoggingAfterFilter implements Filter {
      * @param response The response associated with the request
      * @param chain    Provides access to the next filter in the chain for this filter to pass the request and response
      *                 to for further processing
-     * @throws IOException
-     * @throws ServletException
+     * @throws IOException if an I/O error occurs during the filter processing
+     * @throws ServletException if an error occurs during the filter processing
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(null != authentication) {
-            log.info("User " + authentication.getName() + " is successfully authenticated and "
-                    + "has the authorities " + authentication.getAuthorities().toString());
+            log.info("User {} is successfully authenticated and has the authorities {}",
+                    authentication.getName(), authentication.getAuthorities().toString());
         }
         chain.doFilter(request,response);
     }

@@ -22,11 +22,11 @@ import java.nio.charset.StandardCharsets;
 
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     /**
-     * @param request
-     * @param response
-     * @param filterChain
-     * @throws ServletException
-     * @throws IOException
+     * @param request the request to process
+     * @param response the response associated with the request
+     * @param filterChain provides access to the next filter in the chain for this filter to pass the request
+     * @throws ServletException if an error occurs during the filter processing
+     * @throws IOException if an I/O error occurs during the filter processing
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

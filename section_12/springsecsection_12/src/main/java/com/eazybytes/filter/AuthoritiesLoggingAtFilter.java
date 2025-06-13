@@ -12,8 +12,8 @@ public class AuthoritiesLoggingAtFilter implements Filter {
      * @param response The response associated with the request
      * @param chain    Provides access to the next filter in the chain for this filter to pass the request and response
      *                 to for further processing
-     * @throws IOException
-     * @throws ServletException
+     * @throws IOException: if an I/O error occurs during the filter processing
+     * @throws ServletException : if an error occurs during the filter processing
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

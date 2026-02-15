@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
     /**
-     * @param request
-     * @param response
-     * @param filterChain
-     * @throws ServletException
-     * @throws IOException
+     * @param request: The request to process
+     * @param response: The response associated with the request
+     * @param filterChain: Provides access to the next filter in the chain
+     * @throws ServletException - ServletException
+     * @throws IOException - IOException
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

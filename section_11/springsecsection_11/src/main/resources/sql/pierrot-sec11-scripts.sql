@@ -3,9 +3,9 @@ create database eazybanksection11_db;
 
 use eazybanksection11_db;
 
-drop table `authorities`;
-drop table `users`;
-drop table `customer`;
+drop table if exists `authorities`;
+drop table if exists `users`;
+drop table if exists `customer`;
 
 CREATE TABLE `customer` (
   `customer_id` int NOT NULL AUTO_INCREMENT,

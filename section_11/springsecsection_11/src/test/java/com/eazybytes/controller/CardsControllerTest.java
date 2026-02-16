@@ -6,13 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,6 +19,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CardsController.class)
@@ -29,7 +29,7 @@ class CardsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private CardsRepository cardsRepository;
 
     private List<Cards> testCards;
@@ -56,7 +56,7 @@ class CardsControllerTest {
         card2.setAvailableAmount(20000);
         card2.setCreateDt(LocalDateTime.now());
 
-        testCards = Arrays.asList(card1, card2);
+        testCards = List.of(card1, card2);
     }
 
     @Test
@@ -86,7 +86,8 @@ class CardsControllerTest {
                 .andExpect(jsonPath("$[0].amountUsed").value(15000))
                 .andExpect(jsonPath("$[0].availableAmount").value(35000))
                 .andExpect(jsonPath("$[1].cardId").value(2))
-                .andExpect(jsonPath("$[1].cardType").value("Debit Card"));
+                .andExpect(jsonPath("$[1].cardType").value("Debit Card"))
+                .andDo(print());
     }
 
     @Test
@@ -117,7 +118,7 @@ class CardsControllerTest {
     @WithMockUser(roles = "USER")
     @DisplayName("Should handle single card correctly")
     void testGetCardDetails_SingleCard() throws Exception {
-        List<Cards> singleCard = Collections.singletonList(testCards.get(0));
+        List<Cards> singleCard = Collections.singletonList(testCards.getFirst());
         when(cardsRepository.findByCustomerId(1L)).thenReturn(singleCard);
 
         mockMvc.perform(get("/myCards")
@@ -161,7 +162,7 @@ class CardsControllerTest {
     @WithMockUser(roles = "USER")
     @DisplayName("Should verify all card details are correctly mapped")
     void testGetCardDetails_VerifyAllFields() throws Exception {
-        when(cardsRepository.findByCustomerId(1L)).thenReturn(Collections.singletonList(testCards.get(0)));
+        when(cardsRepository.findByCustomerId(1L)).thenReturn(Collections.singletonList(testCards.getFirst()));
 
         mockMvc.perform(get("/myCards")
                         .param("id", "1")

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.sql.Date;
@@ -31,7 +31,7 @@ class LoansControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private LoanRepository loanRepository;
 
     private List<Loans> testLoans;
@@ -119,7 +119,7 @@ class LoansControllerTest {
     @WithMockUser(roles = "USER")
     @DisplayName("Should handle single loan correctly")
     void testGetLoanDetails_SingleLoan() throws Exception {
-        List<Loans> singleLoan = Collections.singletonList(testLoans.get(0));
+        List<Loans> singleLoan = Collections.singletonList(testLoans.getFirst());
         when(loanRepository.findByCustomerIdOrderByStartDtDesc(1L)).thenReturn(singleLoan);
 
         mockMvc.perform(get("/myLoans")
@@ -179,7 +179,7 @@ class LoansControllerTest {
     @DisplayName("Should verify all loan details are correctly mapped")
     void testGetLoanDetails_VerifyAllFields() throws Exception {
         when(loanRepository.findByCustomerIdOrderByStartDtDesc(1L))
-                .thenReturn(Collections.singletonList(testLoans.get(0)));
+                .thenReturn(Collections.singletonList(testLoans.getFirst()));
 
         mockMvc.perform(get("/myLoans")
                         .param("id", "1")

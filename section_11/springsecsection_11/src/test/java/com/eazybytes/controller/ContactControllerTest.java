@@ -2,17 +2,18 @@ package com.eazybytes.controller;
 
 import com.eazybytes.model.Contact;
 import com.eazybytes.repository.ContactRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ContactController.class)
@@ -32,9 +34,9 @@ class ContactControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private ContactRepository contactRepository;
 
     private Contact testContact;
@@ -169,36 +171,31 @@ class ContactControllerTest {
                 .andExpect(jsonPath("$.contactName").value("Jane Smith"))
                 .andExpect(jsonPath("$.contactEmail").value("jane.smith@example.com"))
                 .andExpect(jsonPath("$.subject").value("Technical Support"))
-                .andExpect(jsonPath("$.message").value("My online banking is not working."));
+                .andExpect(jsonPath("$.message").value("My online banking is not working."))
+                .andDo(print());
     }
 
     @Test
     @WithAnonymousUser
     @DisplayName("Should handle long messages correctly")
     void testSaveContactInquiry_LongMessage() throws Exception {
-        Contact longMessageContact = new Contact();
-        longMessageContact.setContactName("Test User");
-        longMessageContact.setContactEmail("test@example.com");
-        longMessageContact.setSubject("Detailed Inquiry");
-        longMessageContact.setMessage("This is a very long message that contains a lot of details " +
-                "about various banking services and questions about multiple account types, " +
-                "transactions, fees, and other banking-related topics that the customer wants to discuss.");
+        Contact contact = getContact();
 
         Contact savedContact = new Contact();
         savedContact.setContactId("SR555666");
-        savedContact.setContactName(longMessageContact.getContactName());
-        savedContact.setContactEmail(longMessageContact.getContactEmail());
-        savedContact.setSubject(longMessageContact.getSubject());
-        savedContact.setMessage(longMessageContact.getMessage());
+        savedContact.setContactName(contact.getContactName());
+        savedContact.setContactEmail(contact.getContactEmail());
+        savedContact.setSubject(contact.getSubject());
+        savedContact.setMessage(contact.getMessage());
         savedContact.setCreateDt(LocalDateTime.now());
 
         when(contactRepository.save(any(Contact.class))).thenReturn(savedContact);
 
         mockMvc.perform(post("/contact")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(longMessageContact)))
+                        .content(objectMapper.writeValueAsString(contact)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value(longMessageContact.getMessage()));
+                .andExpect(jsonPath("$.message").value(contact.getMessage()));
     }
 
     @Test
@@ -222,4 +219,16 @@ class ContactControllerTest {
 
         verify(contactRepository).save(any(Contact.class));
     }
+
+    private static @NonNull Contact getContact() {
+        Contact contact = new Contact();
+        contact.setContactName("Test User");
+        contact.setContactEmail("test@example.com");
+        contact.setSubject("Detailed Inquiry");
+        contact.setMessage("This is a very long message that contains a lot of details " +
+                "about various banking services and questions about multiple account types, " +
+                "transactions, fees, and other banking-related topics that the customer wants to discuss.");
+        return contact;
+    }
+
 }

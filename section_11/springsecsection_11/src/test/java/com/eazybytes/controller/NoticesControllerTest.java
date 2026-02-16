@@ -6,10 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.sql.Date;
@@ -30,7 +30,7 @@ class NoticesControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private NoticeRepository noticeRepository;
 
     private List<Notice> testNotices;
@@ -128,7 +128,7 @@ class NoticesControllerTest {
     @WithAnonymousUser
     @DisplayName("Should return single notice correctly")
     void testGetNotices_SingleNotice() throws Exception {
-        List<Notice> singleNotice = Collections.singletonList(testNotices.get(0));
+        List<Notice> singleNotice = Collections.singletonList(testNotices.getFirst());
         when(noticeRepository.findAllActiveNotices()).thenReturn(singleNotice);
 
         mockMvc.perform(get("/notices"))
@@ -143,7 +143,7 @@ class NoticesControllerTest {
     @WithAnonymousUser
     @DisplayName("Should not include createDt and updateDt in response (JsonIgnore)")
     void testGetNotices_ExcludesIgnoredFields() throws Exception {
-        when(noticeRepository.findAllActiveNotices()).thenReturn(Collections.singletonList(testNotices.get(0)));
+        when(noticeRepository.findAllActiveNotices()).thenReturn(Collections.singletonList(testNotices.getFirst()));
 
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())
@@ -155,7 +155,7 @@ class NoticesControllerTest {
     @WithAnonymousUser
     @DisplayName("Should include all required notice fields")
     void testGetNotices_IncludesAllRequiredFields() throws Exception {
-        when(noticeRepository.findAllActiveNotices()).thenReturn(Collections.singletonList(testNotices.get(0)));
+        when(noticeRepository.findAllActiveNotices()).thenReturn(Collections.singletonList(testNotices.getFirst()));
 
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())
@@ -185,7 +185,7 @@ class NoticesControllerTest {
     @WithAnonymousUser
     @DisplayName("Should verify notice details contain complete information")
     void testGetNotices_CompleteNoticeDetails() throws Exception {
-        when(noticeRepository.findAllActiveNotices()).thenReturn(Collections.singletonList(testNotices.get(0)));
+        when(noticeRepository.findAllActiveNotices()).thenReturn(Collections.singletonList(testNotices.getFirst()));
 
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -34,6 +34,6 @@ public class Cards {
     private int availableAmount;
 
     @Column(name = "create_dt")
-    private Date createDt;
+    private LocalDateTime createDt;
 
 }

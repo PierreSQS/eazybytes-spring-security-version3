@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -32,7 +32,7 @@ public class Customer {
 
     @Column(name = "create_dt")
     @JsonIgnore
-    private Date createDt;
+    private LocalDateTime createDt;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     @JsonIgnore

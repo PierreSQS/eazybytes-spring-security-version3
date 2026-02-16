@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -27,6 +27,6 @@ public class Accounts {
 	private String branchAddress;
 
 	@Column(name = "create_dt")
-	private Date createDt;
+	private LocalDateTime createDt;
 	
 }

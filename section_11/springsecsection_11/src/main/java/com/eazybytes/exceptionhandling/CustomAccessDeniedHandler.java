@@ -1,6 +1,5 @@
 package com.eazybytes.exceptionhandling;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -13,10 +12,10 @@ import java.time.LocalDateTime;
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
-            AccessDeniedException accessDeniedException) throws IOException, ServletException {
+            AccessDeniedException accessDeniedException) throws IOException {
         // Populate dynamic values
         LocalDateTime currentTimeStamp = LocalDateTime.now();
-        String message = (accessDeniedException != null && accessDeniedException.getMessage() != null) ?
+        String message = accessDeniedException.getMessage() != null ?
                 accessDeniedException.getMessage() : "Authorization failed";
         String path = request.getRequestURI();
         response.setHeader("eazybank-denied-reason", "Authorization failed");

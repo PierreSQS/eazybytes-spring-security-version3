@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,28 +30,24 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
      * @throws IOException - IOException
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
        String jwt = request.getHeader(ApplicationConstants.JWT_HEADER);
        if(null != jwt) {
            try {
                Environment env = getEnvironment();
-               if (null != env) {
-                   String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
-                           ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
-                   SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-                   if(null !=secretKey) {
-                       Claims claims = Jwts.parser().verifyWith(secretKey)
-                                .build().parseSignedClaims(jwt).getPayload();
-                       String username = String.valueOf(claims.get("username"));
-                       String authorities = String.valueOf(claims.get("authorities"));
-                       Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
-                               AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
-                       SecurityContextHolder.getContext().setAuthentication(authentication);
-                   }
-               }
+               String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
+                       ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
+               SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+               Claims claims = Jwts.parser().verifyWith(secretKey)
+                       .build().parseSignedClaims(jwt).getPayload();
+               String username = String.valueOf(claims.get("username"));
+               String authorities = String.valueOf(claims.get("authorities"));
+               Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
+                       AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
+               SecurityContextHolder.getContext().setAuthentication(authentication);
 
-           } catch (Exception exception) {
+           } catch (Exception _) {
                throw new BadCredentialsException("Invalid Token received!");
            }
        }
@@ -58,7 +55,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return request.getServletPath().equals("/user");
     }
 

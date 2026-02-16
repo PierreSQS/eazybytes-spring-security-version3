@@ -32,10 +32,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class ProjectSecurityConfig {
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) {
         CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
         http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(corsConfig -> corsConfig.configurationSource(request -> {
+                .cors(corsConfig -> corsConfig.configurationSource(_ -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                     config.setAllowedMethods(Collections.singletonList("*"));
@@ -76,7 +76,6 @@ public class ProjectSecurityConfig {
     /**
      * From Spring Security 6.3 version
      *
-     * @return
      */
     @Bean
     public CompromisedPasswordChecker compromisedPasswordChecker() {

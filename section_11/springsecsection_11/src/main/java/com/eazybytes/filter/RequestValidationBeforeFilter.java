@@ -46,7 +46,7 @@ public class RequestValidationBeforeFilter implements Filter {
                         res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         return;
                     }
-                } catch (IllegalArgumentException exception) {
+                } catch (IllegalArgumentException _) {
                     throw new BadCredentialsException("Failed to decode basic authentication token");
                 }
             }

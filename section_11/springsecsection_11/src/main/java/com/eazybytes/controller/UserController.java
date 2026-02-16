@@ -69,7 +69,7 @@ public class UserController {
         Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.username(),
                 loginRequest.password());
         Authentication authenticationResponse = authenticationManager.authenticate(authentication);
-        if(null != authenticationResponse && authenticationResponse.isAuthenticated() && null != env) {
+        if(authenticationResponse.isAuthenticated() && null != env) {
                 String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY,
                         ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
                 SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));

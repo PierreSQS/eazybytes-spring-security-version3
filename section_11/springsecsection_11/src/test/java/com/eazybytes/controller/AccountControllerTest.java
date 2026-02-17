@@ -6,7 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,9 +18,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(AccountController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @DisplayName("Account Controller Tests")
 class AccountControllerTest {
 
@@ -62,7 +65,8 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.customerId").value(1))
                 .andExpect(jsonPath("$.accountNumber").value(123456789))
                 .andExpect(jsonPath("$.accountType").value("Savings"))
-                .andExpect(jsonPath("$.branchAddress").value("123 Main Street, New York"));
+                .andExpect(jsonPath("$.branchAddress").value("123 Main Street, New York"))
+                .andDo(print());
     }
 
     @Test
@@ -72,7 +76,8 @@ class AccountControllerTest {
         mockMvc.perform(get("/myAccount")
                         .param("id", "1")
                         .with(csrf()))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andDo(print());
     }
 
     @Test

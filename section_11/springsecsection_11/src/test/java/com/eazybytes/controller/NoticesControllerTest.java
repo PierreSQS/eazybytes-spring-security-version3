@@ -6,7 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -15,15 +16,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(NoticesController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @DisplayName("Notices Controller Tests")
 class NoticesControllerTest {
 
@@ -64,7 +66,7 @@ class NoticesControllerTest {
         notice3.setCreateDt(LocalDateTime.now().minusDays(5));
         notice3.setUpdateDt(LocalDateTime.now().minusDays(1));
 
-        testNotices = Arrays.asList(notice1, notice2, notice3);
+        testNotices = List.of(notice1, notice2, notice3);
     }
 
     @Test
@@ -84,7 +86,8 @@ class NoticesControllerTest {
                 .andExpect(jsonPath("$[0].noticeDetails").value("Our banking system will undergo scheduled maintenance on Saturday from 2 AM to 6 AM."))
                 .andExpect(jsonPath("$[1].noticeId").value(2))
                 .andExpect(jsonPath("$[1].noticeSummary").value("New Feature Launch"))
-                .andExpect(jsonPath("$[2].noticeId").value(3));
+                .andExpect(jsonPath("$[2].noticeId").value(3))
+                .andDo(print());
     }
 
     @Test
@@ -97,7 +100,8 @@ class NoticesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(header().exists("Cache-Control"))
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(3));
+                .andExpect(jsonPath("$.length()").value(3))
+                .andDo(print());
     }
 
     @Test
@@ -109,7 +113,8 @@ class NoticesControllerTest {
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())
                 .andExpect(header().exists("Cache-Control"))
-                .andExpect(header().string("Cache-Control", "max-age=60"));
+                .andExpect(header().string("Cache-Control", "max-age=60"))
+                .andDo(print());
     }
 
     @Test
@@ -121,7 +126,8 @@ class NoticesControllerTest {
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.length()").value(0))
+                .andDo(print());
     }
 
     @Test
@@ -136,7 +142,8 @@ class NoticesControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].noticeId").value(1))
-                .andExpect(jsonPath("$[0].noticeSummary").value("System Maintenance"));
+                .andExpect(jsonPath("$[0].noticeSummary").value("System Maintenance"))
+                .andDo(print());
     }
 
     @Test
@@ -148,7 +155,8 @@ class NoticesControllerTest {
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].createDt").doesNotExist())
-                .andExpect(jsonPath("$[0].updateDt").doesNotExist());
+                .andExpect(jsonPath("$[0].updateDt").doesNotExist())
+                .andDo(print());
     }
 
     @Test
@@ -163,7 +171,8 @@ class NoticesControllerTest {
                 .andExpect(jsonPath("$[0].noticeSummary").exists())
                 .andExpect(jsonPath("$[0].noticeDetails").exists())
                 .andExpect(jsonPath("$[0].noticBegDt").exists())
-                .andExpect(jsonPath("$[0].noticEndDt").exists());
+                .andExpect(jsonPath("$[0].noticEndDt").exists())
+                .andDo(print());
     }
 
     @Test
@@ -178,7 +187,8 @@ class NoticesControllerTest {
                 .andExpect(jsonPath("$.length()").value(3))
                 .andExpect(jsonPath("$[0].noticeSummary").value("System Maintenance"))
                 .andExpect(jsonPath("$[1].noticeSummary").value("New Feature Launch"))
-                .andExpect(jsonPath("$[2].noticeSummary").value("Holiday Hours"));
+                .andExpect(jsonPath("$[2].noticeSummary").value("Holiday Hours"))
+                .andDo(print());
     }
 
     @Test
@@ -190,7 +200,8 @@ class NoticesControllerTest {
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].noticeDetails")
-                        .value("Our banking system will undergo scheduled maintenance on Saturday from 2 AM to 6 AM."));
+                        .value("Our banking system will undergo scheduled maintenance on Saturday from 2 AM to 6 AM."))
+                .andDo(print());
     }
 
     @Test
@@ -202,6 +213,7 @@ class NoticesControllerTest {
         mockMvc.perform(get("/notices"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(3));
+                .andExpect(jsonPath("$.length()").value(3))
+                .andDo(print());
     }
 }

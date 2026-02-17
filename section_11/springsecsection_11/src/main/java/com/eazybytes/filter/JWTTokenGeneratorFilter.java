@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
     /**
@@ -32,6 +34,7 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
+        log.info("###### JWTTokenGeneratorFilter called ######");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (null != authentication) {
             Environment env = getEnvironment();
@@ -45,8 +48,10 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                     .issuedAt(new Date())
                     .expiration(new Date((new Date()).getTime() + 30000000))
                     .signWith(secretKey).compact();
+            log.info("###### JWT Token: {} ######", jwt);
             response.setHeader(ApplicationConstants.JWT_HEADER, jwt);
         }
+        log.info("###### JWTTokenGeneratorFilter finished, calling next filter ######");
         filterChain.doFilter(request, response);
     }
 

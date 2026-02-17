@@ -4,14 +4,20 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name="account_transactions")
 public class AccountTransactions {
 	
@@ -26,7 +32,7 @@ public class AccountTransactions {
 	private long customerId;
 	
 	@Column(name="transaction_dt")
-	private Date transactionDt;
+	private LocalDateTime transactionDt;
 	
 	@Column(name = "transaction_summary")
 	private String transactionSummary;
@@ -41,6 +47,6 @@ public class AccountTransactions {
 	private int closingBalance;
 	
 	@Column(name = "create_dt")
-	private Date createDt;
+	private LocalDateTime createDt;
 
 }

@@ -4,13 +4,20 @@ package com.eazybytes.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Accounts {
 
 	@Column(name = "customer_id")
@@ -27,6 +34,6 @@ public class Accounts {
 	private String branchAddress;
 
 	@Column(name = "create_dt")
-	private Date createDt;
+	private LocalDateTime createDt;
 	
 }

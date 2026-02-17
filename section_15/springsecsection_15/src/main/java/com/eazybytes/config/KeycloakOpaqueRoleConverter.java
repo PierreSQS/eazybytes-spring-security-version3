@@ -16,11 +16,12 @@ public class KeycloakOpaqueRoleConverter implements OpaqueTokenAuthenticationCon
     /**
      * @param introspectedToken      the bearer token used to perform token introspection
      * @param authenticatedPrincipal the result of token introspection
-     * @return
+     * @return An Authentication that represents the authenticated principal,
+     * including authorities extracted from the token.
      */
     @Override
     public Authentication convert(String introspectedToken, OAuth2AuthenticatedPrincipal authenticatedPrincipal) {
-        String username = authenticatedPrincipal.getAttribute("preferred_username");
+        authenticatedPrincipal.getAttribute("preferred_username");
         Map<String, Object> realmAccess = authenticatedPrincipal.getAttribute("realm_access");
         Collection<GrantedAuthority> roles = ((List<String>) realmAccess.get("roles"))
                 .stream().map(roleName -> "ROLE_" + roleName)

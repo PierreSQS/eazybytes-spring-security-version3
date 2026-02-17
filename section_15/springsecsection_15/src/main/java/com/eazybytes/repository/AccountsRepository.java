@@ -4,9 +4,11 @@ import com.eazybytes.model.Accounts;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface AccountsRepository extends CrudRepository<Accounts, Long> {
 
-    Accounts findByCustomerId(long customerId);
+    Optional<Accounts> findByCustomerId(long customerId);
 
 }

@@ -19,10 +19,12 @@ public class KeycloakOpaqueRoleConverter implements OpaqueTokenAuthenticationCon
      * @return An Authentication that represents the authenticated principal,
      * including authorities extracted from the token.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Authentication convert(String introspectedToken, OAuth2AuthenticatedPrincipal authenticatedPrincipal) {
         authenticatedPrincipal.getAttribute("preferred_username");
         Map<String, Object> realmAccess = authenticatedPrincipal.getAttribute("realm_access");
+        assert realmAccess != null;
         Collection<GrantedAuthority> roles = ((List<String>) realmAccess.get("roles"))
                 .stream().map(roleName -> "ROLE_" + roleName)
                 .map(SimpleGrantedAuthority::new)

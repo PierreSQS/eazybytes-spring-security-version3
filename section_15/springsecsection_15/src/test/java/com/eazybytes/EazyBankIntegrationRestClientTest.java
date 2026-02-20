@@ -25,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import org.springframework.web.context.WebApplicationContext;
@@ -243,6 +244,7 @@ class EazyBankIntegrationRestClientTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     void getMyLoans_withBearerToken_returnsLoans() {
         restTestClient.get()
                 .uri(uriBuilder -> uriBuilder

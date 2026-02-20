@@ -1,19 +1,5 @@
 package com.eazybytes;
 
-import com.eazybytes.model.Accounts;
-import com.eazybytes.model.AccountTransactions;
-import com.eazybytes.model.Cards;
-import com.eazybytes.model.Contact;
-import com.eazybytes.model.Customer;
-import com.eazybytes.model.Loans;
-import com.eazybytes.model.Notice;
-import com.eazybytes.repository.AccountsRepository;
-import com.eazybytes.repository.AccountTransactionsRepository;
-import com.eazybytes.repository.CardsRepository;
-import com.eazybytes.repository.ContactRepository;
-import com.eazybytes.repository.CustomerRepository;
-import com.eazybytes.repository.LoanRepository;
-import com.eazybytes.repository.NoticeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 // Integration test — loads the full Spring application context and exercises
 // the real security filter chain. RestTestClient is bound to the
@@ -66,8 +45,8 @@ class EazyBankIntegrationRestClientTest {
     static class LoggingBearerTokenInterceptor implements ClientHttpRequestInterceptor {
 
         // A minimal, pre-signed HS256 JWT whose payload contains:
-        //   { "sub": "test@example.com",
-        //     "preferred_username": "test@example.com",
+        //   { "sub": "happy@example.com",
+        //     "preferred_username": "happy@example.com",
         //     "realm_access": { "roles": ["USER"] },
         //     "iat": <past>, "exp": <far future> }
         // Generated offline with JJWT so no external service is needed.
@@ -106,23 +85,6 @@ class EazyBankIntegrationRestClientTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
-    // All repositories are mocked so that the test does not require a real
-    // MySQL database while still exercising the full Spring MVC + Security stack.
-    @MockitoBean
-    CustomerRepository customerRepository;
-    @MockitoBean
-    AccountsRepository accountsRepository;
-    @MockitoBean
-    AccountTransactionsRepository accountTransactionsRepository;
-    @MockitoBean
-    CardsRepository cardsRepository;
-    @MockitoBean
-    LoanRepository loanRepository;
-    @MockitoBean
-    NoticeRepository noticeRepository;
-    @MockitoBean
-    ContactRepository contactRepository;
-
     private RestTestClient restTestClient;
 
     @BeforeEach
@@ -135,66 +97,6 @@ class EazyBankIntegrationRestClientTest {
                                 new LoggingBearerTokenInterceptor(TestTokenUtil.SIGNED_JWT))
                 .build();
 
-        // --- shared mock data ---
-        Customer mockCustomer = Customer.builder()
-                .id(1L)
-                .name("Test User")
-                .email("test@example.com")
-                .mobileNumber("1111111111")
-                .build();
-
-        Accounts mockAccount = Accounts.builder()
-                .customerId(1L)
-                .accountNumber(123456789L)
-                .accountType("Savings")
-                .branchAddress("123 Main St")
-                .build();
-
-        AccountTransactions mockTransaction = AccountTransactions.builder()
-                .transactionId("TX001")
-                .accountNumber(123456789L)
-                .customerId(1L)
-                .transactionType("Credit")
-                .transactionAmt(500)
-                .build();
-
-        Cards mockCard = new Cards();
-        mockCard.setCardId(1L);
-        mockCard.setCustomerId(1L);
-        mockCard.setCardNumber("4111111111111111");
-        mockCard.setCardType("Credit");
-        mockCard.setTotalLimit(10000);
-        mockCard.setAmountUsed(2500);
-        mockCard.setAvailableAmount(7500);
-
-        Loans mockLoan = new Loans();
-        mockLoan.setLoanNumber(1001L);
-        mockLoan.setCustomerId(1L);
-        mockLoan.setLoanType("Home");
-        mockLoan.setTotalLoan(200000);
-        mockLoan.setAmountPaid(50000);
-        mockLoan.setOutstandingAmount(150000);
-
-        Notice mockNotice = new Notice();
-        mockNotice.setNoticeId(1L);
-        mockNotice.setNoticeSummary("System Maintenance");
-        mockNotice.setNoticeDetails("Scheduled downtime on Sunday.");
-
-        Contact savedContact = new Contact();
-        savedContact.setContactId("SR123456");
-        savedContact.setContactName("Jane Doe");
-        savedContact.setContactEmail("jane@example.com");
-        savedContact.setSubject("Account Issue");
-        savedContact.setMessage("I have a problem with my account.");
-
-        when(customerRepository.findByEmail("test@example.com")).thenReturn(Optional.of(mockCustomer));
-        when(accountsRepository.findByCustomerId(1L)).thenReturn(Optional.of(mockAccount));
-        when(accountTransactionsRepository.findByCustomerIdOrderByTransactionDtDesc(1L))
-                .thenReturn(List.of(mockTransaction));
-        when(cardsRepository.findByCustomerId(1L)).thenReturn(List.of(mockCard));
-        when(loanRepository.findByCustomerIdOrderByStartDtDesc(1L)).thenReturn(List.of(mockLoan));
-        when(noticeRepository.findAllActiveNotices()).thenReturn(List.of(mockNotice));
-        when(contactRepository.save(any(Contact.class))).thenReturn(savedContact);
     }
 
     // -----------------------------------------------------------------------
@@ -206,12 +108,12 @@ class EazyBankIntegrationRestClientTest {
         restTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/myAccount")
-                        .queryParam("email", "test@example.com")
+                        .queryParam("email", "happy@example.com")
                         .build())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.accountNumber").isEqualTo(123456789)
+                .jsonPath("$.accountNumber").isEqualTo(1865764534)
                 .jsonPath("$.accountType").isEqualTo("Savings");
     }
 
@@ -220,13 +122,13 @@ class EazyBankIntegrationRestClientTest {
         restTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/myBalance")
-                        .queryParam("email", "test@example.com")
+                        .queryParam("email", "happy@example.com")
                         .build())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$[0].transactionType").isEqualTo("Credit")
-                .jsonPath("$[0].transactionAmt").isEqualTo(500);
+                .jsonPath("$[0].transactionType").isEqualTo("Withdrawal")
+                .jsonPath("$[0].transactionAmt").isEqualTo(100);
     }
 
     @Test
@@ -234,7 +136,7 @@ class EazyBankIntegrationRestClientTest {
         restTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/myCards")
-                        .queryParam("email", "test@example.com")
+                        .queryParam("email", "happy@example.com")
                         .build())
                 .exchange()
                 .expectStatus().isOk()
@@ -244,12 +146,11 @@ class EazyBankIntegrationRestClientTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
     void getMyLoans_withBearerToken_returnsLoans() {
         restTestClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/myLoans")
-                        .queryParam("email", "test@example.com")
+                        .queryParam("email", "happy@example.com")
                         .build())
                 .exchange()
                 .expectStatus().isOk()
@@ -268,7 +169,7 @@ class EazyBankIntegrationRestClientTest {
                 .expectStatus().isOk()
                 .expectHeader().valueMatches("Cache-Control", ".*max-age=60.*")
                 .expectBody()
-                .jsonPath("$[0].noticeSummary").isEqualTo("System Maintenance");
+                .jsonPath("$[0].noticeSummary").isEqualTo("Home Loan Interest rates reduced");
     }
 
     @Test

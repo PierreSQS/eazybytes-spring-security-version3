@@ -27,8 +27,8 @@ final class TestTokenUtil {
 
     /** A ready-to-use signed JWT that grants {@code ROLE_USER}. */
     static final String SIGNED_JWT = Jwts.builder()
-            .subject("test@example.com")
-            .claim("preferred_username", "test@example.com")
+            .subject("happy@example.com")
+            .claim("preferred_username", "happy@example.com")
             .claim("realm_access", Map.of("roles", List.of("USER")))
             .issuedAt(Date.from(Instant.now().minus(1, ChronoUnit.MINUTES)))
             .expiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)))

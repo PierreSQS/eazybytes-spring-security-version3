@@ -69,7 +69,7 @@ class EazyBankIntegrationRestClientTest {
         //     "preferred_username": "test@example.com",
         //     "realm_access": { "roles": ["USER"] },
         //     "iat": <past>, "exp": <far future> }
-        // Generated offline with jjwt so no external service is needed.
+        // Generated offline with JJWT so no external service is needed.
         // For tests that only need to clear the security filter (permitAll
         // endpoints) the token is still sent so the interceptor fires on every call.
         private final String bearerToken;
@@ -130,9 +130,8 @@ class EazyBankIntegrationRestClientTest {
         // The interceptor is registered via the underlying RestClient builder.
         restTestClient = RestTestClient
                 .bindToApplicationContext(webApplicationContext)
-                .configureClient(clientBuilder ->
-                        clientBuilder.requestInterceptor(
-                                new LoggingBearerTokenInterceptor(TestTokenUtil.SIGNED_JWT)))
+                .requestInterceptor(
+                                new LoggingBearerTokenInterceptor(TestTokenUtil.SIGNED_JWT))
                 .build();
 
         // --- shared mock data ---

@@ -3,15 +3,16 @@ create database eazybanksection15_db;
 
 use eazybanksection15_db;
 
-drop table if exists `authorities`;
-drop table if exists `users`;
-drop table if exists `customer`;
-drop table if exists `accounts`;
-drop table if exists `cards`;
-drop table if exists `loans`;
-drop table if exists `account_transactions`;
-drop table if exists `contact_messages`;
-drop table if exists `notice_details`;
+-- NO NEEDED ANYMORE SINCE WE DELETE THE DB OUTWRIGHT
+-- drop table if exists `authorities`;
+-- drop table if exists `users`;
+-- drop table if exists `customer`;
+-- drop table if exists `accounts`;
+-- drop table if exists `cards`;
+-- drop table if exists `loans`;
+-- drop table if exists `account_transactions`;
+-- drop table if exists `contact_messages`;
+-- drop table if exists `notice_details`;
 
 CREATE TABLE `customer` (
                             `customer_id` int NOT NULL AUTO_INCREMENT,

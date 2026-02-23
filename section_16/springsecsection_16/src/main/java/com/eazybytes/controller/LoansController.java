@@ -24,16 +24,9 @@ public class LoansController {
     @PostAuthorize("hasRole('USER')")
     public List<Loans> getLoanDetails(@RequestParam String email) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
-        if (optionalCustomer.isPresent()) {
-            List<Loans> loans = loanRepository.findByCustomerIdOrderByStartDtDesc(optionalCustomer.get().getId());
-            if (loans != null) {
-                return loans;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
+        return optionalCustomer
+                .map(customer -> loanRepository.findByCustomerIdOrderByStartDtDesc(customer.getId()))
+                .orElse(null);
     }
 
 }

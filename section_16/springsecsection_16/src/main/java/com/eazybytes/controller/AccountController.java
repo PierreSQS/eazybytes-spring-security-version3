@@ -21,16 +21,8 @@ public class AccountController {
     @GetMapping("/myAccount")
     public Accounts getAccountDetails(@RequestParam String email) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
-        if (optionalCustomer.isPresent()) {
-            Accounts accounts = accountsRepository.findByCustomerId(optionalCustomer.get().getId());
-            if (accounts != null) {
-                return accounts;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
+        return optionalCustomer.map(customer -> accountsRepository.findByCustomerId(customer.getId()))
+                .orElse(null);
     }
 
 }

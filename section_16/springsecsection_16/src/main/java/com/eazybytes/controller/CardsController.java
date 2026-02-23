@@ -22,16 +22,9 @@ public class CardsController {
     @GetMapping("/myCards")
     public List<Cards> getCardDetails(@RequestParam String email) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
-        if (optionalCustomer.isPresent()) {
-            List<Cards> cards = cardsRepository.findByCustomerId(optionalCustomer.get().getId());
-            if (cards != null) {
-                return cards;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
+        return optionalCustomer
+                .map(customer -> cardsRepository.findByCustomerId(customer.getId()))
+                .orElse(null);
     }
 
 }

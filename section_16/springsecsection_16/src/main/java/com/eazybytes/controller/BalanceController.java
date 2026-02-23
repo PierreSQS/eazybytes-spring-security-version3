@@ -1,7 +1,6 @@
 package com.eazybytes.controller;
 
 import com.eazybytes.model.AccountTransactions;
-import com.eazybytes.model.Accounts;
 import com.eazybytes.model.Customer;
 import com.eazybytes.repository.AccountTransactionsRepository;
 import com.eazybytes.repository.CustomerRepository;
@@ -23,16 +22,8 @@ public class BalanceController {
     @GetMapping("/myBalance")
     public List<AccountTransactions> getBalanceDetails(@RequestParam String email) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
-        if (optionalCustomer.isPresent()) {
-            List<AccountTransactions> accountTransactions = accountTransactionsRepository.
-                    findByCustomerIdOrderByTransactionDtDesc(optionalCustomer.get().getId());
-            if (accountTransactions != null) {
-                return accountTransactions;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
+        return optionalCustomer.map(customer -> accountTransactionsRepository.
+                findByCustomerIdOrderByTransactionDtDesc(customer.getId()))
+                .orElse(null);
     }
 }

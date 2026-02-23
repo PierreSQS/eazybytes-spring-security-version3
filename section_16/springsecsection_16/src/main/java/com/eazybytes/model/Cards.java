@@ -1,13 +1,20 @@
 package com.eazybytes.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "cards")
 public class Cards {
 

@@ -9,19 +9,18 @@ import org.springframework.security.oauth2.server.resource.introspection.OpaqueT
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class KeycloakOpaqueRoleConverter implements OpaqueTokenAuthenticationConverter {
     /**
      * @param introspectedToken      the bearer token used to perform token introspection
      * @param authenticatedPrincipal the result of token introspection
-     * @return
+     * @return the {@link Authentication} to be used in the SecurityContext
      */
     @Override
     public Authentication convert(String introspectedToken, OAuth2AuthenticatedPrincipal authenticatedPrincipal) {
         ArrayList<String> roles  = authenticatedPrincipal.getAttribute("scope");
+        assert roles != null;
         Collection<GrantedAuthority> grantedAuthorities = roles
                 .stream().map(roleName -> "ROLE_" + roleName)
                 .map(SimpleGrantedAuthority::new)

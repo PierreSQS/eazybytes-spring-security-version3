@@ -17,7 +17,7 @@ public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedA
      */
     @Override
     public Collection<GrantedAuthority> convert(Jwt source) {
-        ArrayList<String> roles = (ArrayList<String>) source.getClaims().get("roles");
+        ArrayList<String> roles = (ArrayList<String>) source.getClaims().get("scope");
         if (roles == null || roles.isEmpty()) {
             return new ArrayList<>();
         }

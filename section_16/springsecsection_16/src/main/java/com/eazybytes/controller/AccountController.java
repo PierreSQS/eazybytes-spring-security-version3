@@ -21,7 +21,9 @@ public class AccountController {
     @GetMapping("/myAccount")
     public Accounts getAccountDetails(@RequestParam String email) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
-        return optionalCustomer.map(customer -> accountsRepository.findByCustomerId(customer.getId()))
+
+        return optionalCustomer
+                .flatMap(customer -> accountsRepository.findByCustomerId(customer.getId()))
                 .orElse(null);
     }
 

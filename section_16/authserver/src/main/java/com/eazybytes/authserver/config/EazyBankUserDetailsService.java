@@ -3,6 +3,7 @@ package com.eazybytes.authserver.config;
 import com.eazybytes.authserver.model.Customer;
 import com.eazybytes.authserver.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,7 +22,8 @@ public class EazyBankUserDetailsService implements UserDetailsService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    @NonNull
+    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         Customer customer = customerRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User details not found for the user: " + username));
 

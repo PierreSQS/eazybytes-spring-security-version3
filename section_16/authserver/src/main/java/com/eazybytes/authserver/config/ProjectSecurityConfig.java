@@ -115,10 +115,13 @@ public class ProjectSecurityConfig {
                 // The authorization code grant type is required for auth code clients
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .scope(OidcScopes.OPENID).scope(OidcScopes.OPENID)
+                .scope(OidcScopes.OPENID).scope(OidcScopes.EMAIL)
                 // specifies where the authorization server redirects
                 // the users after they approve the authorization request
-                .redirectUri("https://oauth2.pstmn.io/v1/callback")
+                .redirectUri("https://oauth.pstmn.io/v1/callback")
+                .clientSettings(ClientSettings.builder()
+                        .requireProofKey(false) // Auth code not PKCE
+                        .build())
                 .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofMinutes(10))
                         .refreshTokenTimeToLive(Duration.ofHours(8)).reuseRefreshTokens(false)
                         .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
@@ -134,9 +137,11 @@ public class ProjectSecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .scope(OidcScopes.OPENID).scope(OidcScopes.EMAIL)
-                // PKCE is required for public clients (i.e. those that don't have a client secret)
+                // specifies where the authorization server redirects
+                // the users after they approve the authorization request
+                .redirectUri("https://oauth.pstmn.io/v1/callback")
                 .clientSettings(ClientSettings.builder()
-                        .requireProofKey(true)
+                        .requireProofKey(true) // PKCE is required for public clients
                         .build())
                 // Token settings for the PKCE client — typically short-lived access tokens
                 // and long-lived refresh tokens with one-time use

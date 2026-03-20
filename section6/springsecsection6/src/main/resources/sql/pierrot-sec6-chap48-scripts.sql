@@ -22,7 +22,7 @@ CREATE TABLE `customer` (
   PRIMARY KEY (`id`)
 );
 
-INSERT  INTO `customer` (`email`, `pwd`, `role`) VALUES ('happy@example.com', '{noop}EazyBytes@12345', 'read');
-INSERT  INTO `customer` (`email`, `pwd`, `role`) VALUES ('admin@example.com', '{bcrypt}$2a$12$7Fy0ops/3W4pUPyHFMCO7.o4dd5L6iAiW1CL5dZawKjGJgs8QHP0m', 'admin');
+INSERT  INTO `customer` (`email`, `pwd`, `role`) VALUES ('happy@example.com', '{noop}happy', 'read');
+INSERT  INTO `customer` (`email`, `pwd`, `role`) VALUES ('admin@example.com', '{bcrypt}$2a$12$0.DPiFYx2NUiC6z9Fa8HSu7LUX4ExhAuJnWX1Ab06M1QrjHTsUJou', 'admin');
 
 #use eazybank;
